@@ -4,9 +4,9 @@
 from math import pi
 from rospy import set_param
 
-latency = 1000.0 / 1000.0        # One way latency (ms to s)
-rate_hz = 30                    # Loop rate (Hz)
-pos_step_size = 10.0 / 1000.0    # Position step size (mm to m)
+latency = 500.0 / 1000.0        # One way latency (ms to s)
+rate_hz = 50                    # Loop rate (Hz)
+pos_step_size = 1.0 / 1000.0    # Position step size (mm to m)
 rot_step_size = 0.5 * pi/180    # Rotation step size (deg torads)
 
 set_param('latency', latency)
