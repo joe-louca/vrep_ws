@@ -1,12 +1,8 @@
 #!/usr/bin/env python
 
 import config
-import joy_sub
-import tf_sub
-#import move_pub
 import rospy
 import math
-from std_msgs.msg import Float64
 
 def ax_or_but_press(ax, but):
     # Function to check for any joystick input
@@ -48,9 +44,12 @@ def gripper_toggle(gripper_control):
     return gripper_control
   
 def joy_pose_goal():
+    rospy.init_node('joy_control_node', anonymous=True)
+
     # Parameters
-    pos_step_size = rospy.get_param('/pos_step_size')   
-    rot_step_size = rospy.get_param('/rot_step_size')
+    pos_step_size = rospy.get_param('pos_step_size')   
+    rot_step_size = rospy.get_param('rot_step_size')
+    latency = rospy.get_param('latency')   
 
     # Some variables
     button_press_current = 0
@@ -64,8 +63,6 @@ def joy_pose_goal():
     print('######### Open/Close gripper: X')
 
     while not rospy.is_shutdown():        
-        #rospy.init_node('joy_control_node')
-
         # Read params from joy subscriber        
         ax_x = rospy.get_param('ax/x')
         ax_y = rospy.get_param('ax/y')
@@ -100,16 +97,18 @@ def joy_pose_goal():
         new_z = curr_pos[2] + pos_step_size * ax[2]        
 
         # Update pose (rotation) & save to global config var
-        curr_r, curr_p, curr_ = QuarternionToEuler(curr_rot[0], curr_rot[1], curr_rot[2], curr_rot[3])
+        curr_roll, curr_pitch, curr_yaw = QuarternionToEuler(curr_rot[0], curr_rot[1], curr_rot[2], curr_rot[3])
                   
-        new_r = curr_r + rot_step_size * ax[3]
-        new_p = curr_p + rot_step_size * ax[4]
-        new_y = curr_y + rot_step_size * ax[5] 
+        new_roll = curr_roll + rot_step_size * ax[3]
+        new_pitch = curr_pitch + rot_step_size * ax[4]
+        new_yaw = curr_yaw + rot_step_size * ax[5] 
 
-        new_qx, new_qy, new_qz, new_qw = EulerToQuaternion(new_r, new_p, new_y)                    
+        new_qx, new_qy, new_qz, new_qw = EulerToQuaternion(new_roll, new_pitch, new_yaw)                    
 
+        elapsed_time = rospy.get_time()
+        
         # Set the new pose param
-        rospy.set_param('new_pose', {'x':new_x, 'y':new_y, 'z':new_z, 'qx': new_qx, 'qy':new_qy, 'qz':new_qz, 'qw':new_qw})
+        rospy.set_param('new_pose', {'x':new_x, 'y':new_y, 'z':new_z, 'qx': new_qx, 'qy':new_qy, 'qz':new_qz, 'qw':new_qw, 't':elapsed_time, 'l':latency})
                     
         # If gripper button is pressed, toggle gripper pose
         button_press_previous = button_press_current
@@ -118,11 +117,7 @@ def joy_pose_goal():
             gripper_control = gripper_toggle(gripper_control)
 
         # Set the new gripper pose param
-        rospy.set_param('gripper_control', gripper_control)
-
-            
-        #rospy.spin()  
-    
+        rospy.set_param('gripper_control', gripper_control)    
 
 if __name__ == '__main__':
     joy_pose_goal()

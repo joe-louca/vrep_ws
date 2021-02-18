@@ -1,12 +1,8 @@
 #!/usr/bin/env python
 
 import config
-import joy_sub
-import tf_sub
-#import move_pub
 import rospy
 import math
-from std_msgs.msg import Float64
 
 def ax_or_but_press(ax, but):
     # Function to check for any joystick input
@@ -48,9 +44,12 @@ def gripper_toggle(gripper_control):
     return gripper_control
   
 def joy_pose_goal():
+    rospy.init_node('joy_control_node', anonymous=True)
+
     # Parameters
-    pos_step_size = rospy.get_param('/pos_step_size')   
-    rot_step_size = rospy.get_param('/rot_step_size')
+    pos_step_size = rospy.get_param('pos_step_size')   
+    rot_step_size = rospy.get_param('rot_step_size')
+    latency = rospy.get_param('latency')   
 
     # Some variables
     button_press_current = 0
@@ -106,8 +105,10 @@ def joy_pose_goal():
 
         new_qx, new_qy, new_qz, new_qw = EulerToQuaternion(new_roll, new_pitch, new_yaw)                    
 
+        elapsed_time = rospy.get_time()
+        
         # Set the new pose param
-        rospy.set_param('new_pose', {'x':new_x, 'y':new_y, 'z':new_z, 'qx': new_qx, 'qy':new_qy, 'qz':new_qz, 'qw':new_qw})
+        rospy.set_param('new_pose', {'x':new_x, 'y':new_y, 'z':new_z, 'qx': new_qx, 'qy':new_qy, 'qz':new_qz, 'qw':new_qw, 't':elapsed_time, 'l':latency})
                     
         # If gripper button is pressed, toggle gripper pose
         button_press_previous = button_press_current

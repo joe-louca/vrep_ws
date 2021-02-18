@@ -23,7 +23,7 @@ def joy_callback(msg):
             
 def main():
     # Subscribes to /joy and saves axes and button arrays to global config variables   
-    rospy.init_node('joy_logger_node', anonymous=True)
+    rospy.init_node('joy_sub_node', anonymous=True)
     rospy.Subscriber("joy", Joy, joy_callback, queue_size=1)
     rospy.spin()
     

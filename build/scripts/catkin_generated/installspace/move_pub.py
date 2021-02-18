@@ -17,7 +17,9 @@ def main():
         new_qy = rospy.get_param('new_pose/qy')
         new_qz = rospy.get_param('new_pose/qz')
         new_qw = rospy.get_param('new_pose/qw')
-        new_pose = [new_x, new_y, new_z, new_qx, new_qy, new_qz, new_qw]
+        new_t = rospy.get_param('new_pose/t')
+        new_l = rospy.get_param('new_pose/l')
+        new_pose = [new_x, new_y, new_z, new_qx, new_qy, new_qz, new_qw, new_t, new_l]
 
         msg = Float64MultiArray()
         msg.data = new_pose

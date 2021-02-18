@@ -56,6 +56,7 @@ catkin_install_python(PROGRAMS
    src/joy_control.py
    src/move_pub.py
    src/gripper_pub.py
+   src/time_pub.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 

@@ -10,12 +10,12 @@ def joy_callback(msg):
     # 0/1:     [ X                Circle          Triangle        Square          L1              R1              Share           Options         PS Button       L3                R3           ]
     but = [msg.buttons[0], msg.buttons[1], msg.buttons[2], msg.buttons[3], msg.buttons[4], msg.buttons[5], msg.buttons[8], msg.buttons[9], msg.buttons[10], msg.buttons[11], msg.buttons[12]]    
 
-    x = ax[1]
-    y = ax[0]
+    x = ax[0]
+    y = ax[1]
     z = ax[7]
     roll = ax[3]
     pitch = ax[4]
-    yaw = but[5] - but[4]
+    yaw = float(but[5] - but[4])
     rospy.set_param('ax', {'x':x, 'y':y, 'z':z, 'roll':roll, 'pitch':pitch, 'yaw':yaw})
                     
     x_press = but[0]
@@ -23,7 +23,7 @@ def joy_callback(msg):
             
 def main():
     # Subscribes to /joy and saves axes and button arrays to global config variables   
-    rospy.init_node('joy_logger_node', anonymous=True)
+    rospy.init_node('joy_sub_node', anonymous=True)
     rospy.Subscriber("joy", Joy, joy_callback, queue_size=1)
     rospy.spin()
     

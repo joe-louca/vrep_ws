@@ -6,7 +6,7 @@ from std_msgs.msg import Bool
 def gripper_publisher():
     rate_hz = rospy.get_param('rate_hz')
     pub = rospy.Publisher('gripper_control', Bool, queue_size=1)
-    rospy.init_node('gripper_control_node', anonymous=True)
+    rospy.init_node('gripper_pub_node', anonymous=True)
     rate = rospy.Rate(rate_hz)
 
     while not rospy.is_shutdown():
