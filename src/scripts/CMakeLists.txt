@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   tf2_ros
   tf2_geometry_msgs
+  OpenCV
 )
 
 ###################################
@@ -43,6 +44,7 @@ catkin_package(
 ## Specify additional locations of header files
 include_directories(
  ${catkin_INCLUDE_DIRS}
+ ${OpenCV_INCLUDE_DIRS}
 )
 
 
@@ -57,6 +59,7 @@ catkin_install_python(PROGRAMS
    src/move_pub.py
    src/gripper_pub.py
    src/time_pub.py
+   src/cam1_sub.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 

@@ -11,7 +11,6 @@ def gripper_publisher():
 
     while not rospy.is_shutdown():
         gripper_control = rospy.get_param('gripper_control')
-        
         msg = Bool()
         msg.data = gripper_control
         pub.publish(msg)
