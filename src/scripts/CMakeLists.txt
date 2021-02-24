@@ -60,6 +60,7 @@ catkin_install_python(PROGRAMS
    src/gripper_pub.py
    src/time_pub.py
    src/cam1_sub.py
+   src/cam2_sub.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 

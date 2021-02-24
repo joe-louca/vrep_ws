@@ -136,7 +136,6 @@ def joy_pose_goal():
         # Store current pose & read delayed current pose (return delay)
         t = rospy.get_time()
         curr_pose = [curr_x, curr_y, curr_z, curr_qx, curr_qy, curr_qz, curr_qw, gripper_control, t]
-        #curr_pose = delay_curr_pose(curr_pose)
 
         if curr_pose:
             # Construct useful lists
@@ -174,7 +173,6 @@ def joy_pose_goal():
                 # Store pose & retrieve delayed command    
                 t = rospy.get_time()
                 new_pose = [new_x, new_y, new_z, new_qx, new_qy, new_qz, new_qw, gripper_control, t]
-                #new_pose = delay_new_pose(new_pose)
                 
                 if new_pose:
                     # Set the new pose param (delayed)

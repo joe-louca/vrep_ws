@@ -24,6 +24,8 @@ def cam1_callback(msg):
     br = CvBridge()
     image = br.imgmsg_to_cv2(msg)
     resize = cv2.resize(image, (240,240))
+    #flp = cv2.flip(img, 0)
+    #im = cv2.cvtColor(flp, cv2.COLOR_BGR2RGB)
     cv2.imshow("cam1", resize)
     cv2.waitKey(1)
     #rospy.set_param('cam1', msg)

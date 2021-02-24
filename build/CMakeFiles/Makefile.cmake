@@ -19,6 +19,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/home/joe/vrep_ws/src/scripts/CMakeLists.txt"
   "/home/joe/vrep_ws/src/scripts/package.xml"
   "/home/joe/vrep_ws/src/scripts/src/cam1_sub.py"
+  "/home/joe/vrep_ws/src/scripts/src/cam2_sub.py"
   "/home/joe/vrep_ws/src/scripts/src/config.py"
   "/home/joe/vrep_ws/src/scripts/src/gripper_pub.py"
   "/home/joe/vrep_ws/src/scripts/src/joy_control.py"
