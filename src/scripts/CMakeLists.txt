@@ -52,15 +52,16 @@ include_directories(
 
 ## Mark executable scripts (Python etc.) for installation
 catkin_install_python(PROGRAMS
-   src/config.py
-   src/joy_sub.py
-   src/tf_sub.py
-   src/joy_control.py
-   src/move_pub.py
-   src/gripper_pub.py
-   src/time_pub.py
-   src/cam1_sub.py
-   src/cam2_sub.py
+   src/inputs/config.py
+   src/inputs/joy_sub.py
+   src/inputs/tf_sub.py
+   src/inputs/joy_control.py
+   src/inputs/move_pub.py
+   src/inputs/gripper_pub.py
+   src/inputs/time_pub.py
+   src/feedbacks/cam1_sub.py
+   src/feedbacks/cam2_sub.py
+   src/feedbacks/joy_vibrate.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 

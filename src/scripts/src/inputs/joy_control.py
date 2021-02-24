@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import config
 import rospy
 import math
 

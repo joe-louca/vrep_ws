@@ -1129,6 +1129,19 @@ octomap_msgs_generate_messages_py/fast:
 	$(MAKE) -f scripts/CMakeFiles/octomap_msgs_generate_messages_py.dir/build.make scripts/CMakeFiles/octomap_msgs_generate_messages_py.dir/build
 .PHONY : octomap_msgs_generate_messages_py/fast
 
+#=============================================================================
+# Target rules for targets named _catkin_empty_exported_target
+
+# Build rule for target.
+_catkin_empty_exported_target: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 _catkin_empty_exported_target
+.PHONY : _catkin_empty_exported_target
+
+# fast build rule for target.
+_catkin_empty_exported_target/fast:
+	$(MAKE) -f launch/CMakeFiles/_catkin_empty_exported_target.dir/build.make launch/CMakeFiles/_catkin_empty_exported_target.dir/build
+.PHONY : _catkin_empty_exported_target/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -1216,6 +1229,7 @@ help:
 	@echo "... octomap_msgs_generate_messages_cpp"
 	@echo "... octomap_msgs_generate_messages_nodejs"
 	@echo "... octomap_msgs_generate_messages_py"
+	@echo "... _catkin_empty_exported_target"
 .PHONY : help
 
 

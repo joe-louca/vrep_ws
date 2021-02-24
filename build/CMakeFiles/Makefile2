@@ -55,12 +55,14 @@ CMAKE_BINARY_DIR = /home/joe/vrep_ws/build
 # The main recursive "all" target.
 all: gtest/all
 all: scripts/all
+all: launch/all
 
 .PHONY : all
 
 # The main recursive "preinstall" target.
 preinstall: gtest/preinstall
 preinstall: scripts/preinstall
+preinstall: launch/preinstall
 
 .PHONY : preinstall
 
@@ -72,6 +74,7 @@ clean: CMakeFiles/tests.dir/clean
 clean: CMakeFiles/download_extra_data.dir/clean
 clean: gtest/clean
 clean: scripts/clean
+clean: launch/clean
 
 .PHONY : clean
 
@@ -131,6 +134,24 @@ gtest/googletest/clean: gtest/googletest/CMakeFiles/gtest_main.dir/clean
 gtest/googletest/clean: gtest/googletest/CMakeFiles/gtest.dir/clean
 
 .PHONY : gtest/googletest/clean
+
+#=============================================================================
+# Directory level rules for directory launch
+
+# Recursive "all" directory target.
+launch/all:
+
+.PHONY : launch/all
+
+# Recursive "preinstall" directory target.
+launch/preinstall:
+
+.PHONY : launch/preinstall
+
+# Recursive "clean" directory target.
+launch/clean: launch/CMakeFiles/_catkin_empty_exported_target.dir/clean
+
+.PHONY : launch/clean
 
 #=============================================================================
 # Directory level rules for directory scripts
@@ -2212,6 +2233,33 @@ octomap_msgs_generate_messages_py: scripts/CMakeFiles/octomap_msgs_generate_mess
 scripts/CMakeFiles/octomap_msgs_generate_messages_py.dir/clean:
 	$(MAKE) -f scripts/CMakeFiles/octomap_msgs_generate_messages_py.dir/build.make scripts/CMakeFiles/octomap_msgs_generate_messages_py.dir/clean
 .PHONY : scripts/CMakeFiles/octomap_msgs_generate_messages_py.dir/clean
+
+#=============================================================================
+# Target rules for target launch/CMakeFiles/_catkin_empty_exported_target.dir
+
+# All Build rule for target.
+launch/CMakeFiles/_catkin_empty_exported_target.dir/all:
+	$(MAKE) -f launch/CMakeFiles/_catkin_empty_exported_target.dir/build.make launch/CMakeFiles/_catkin_empty_exported_target.dir/depend
+	$(MAKE) -f launch/CMakeFiles/_catkin_empty_exported_target.dir/build.make launch/CMakeFiles/_catkin_empty_exported_target.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/joe/vrep_ws/build/CMakeFiles --progress-num= "Built target _catkin_empty_exported_target"
+.PHONY : launch/CMakeFiles/_catkin_empty_exported_target.dir/all
+
+# Build rule for subdir invocation for target.
+launch/CMakeFiles/_catkin_empty_exported_target.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/joe/vrep_ws/build/CMakeFiles 0
+	$(MAKE) -f CMakeFiles/Makefile2 launch/CMakeFiles/_catkin_empty_exported_target.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/joe/vrep_ws/build/CMakeFiles 0
+.PHONY : launch/CMakeFiles/_catkin_empty_exported_target.dir/rule
+
+# Convenience name for target.
+_catkin_empty_exported_target: launch/CMakeFiles/_catkin_empty_exported_target.dir/rule
+
+.PHONY : _catkin_empty_exported_target
+
+# clean rule for target.
+launch/CMakeFiles/_catkin_empty_exported_target.dir/clean:
+	$(MAKE) -f launch/CMakeFiles/_catkin_empty_exported_target.dir/build.make launch/CMakeFiles/_catkin_empty_exported_target.dir/clean
+.PHONY : launch/CMakeFiles/_catkin_empty_exported_target.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

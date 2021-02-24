@@ -5,25 +5,51 @@ import cv2
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 
-def cam1_callback(msg):
-    #t = msg.header.stamp
-    t = rospy.get_time()
-    
-    br = CvBridge()
-    img = br.imgmsg_to_cv2(msg)
-    flp = cv2.flip(img, 0)
-    im = cv2.cvtColor(flp, cv2.COLOR_BGR2RGB)
-    cv2.imshow('cam1 stream', im)
-    cv2.waitKey(1)
+def frame_delay(img, t):
+    # Stores frame and timestamps in 2 arrays. Retrieves delayed frames. Removes old poses
+    global delayed_frames
+    global delayed_ts
 
-    #img_list = img.tolist()
-    #rospy.set_param('cam1', img_list)
+    # Store frame & timestamp
+    delayed_frames.insert(0, img)
+    delayed_ts.insert(0, t+latency)
+    
+    tbl_len = len(delayed_ts)
+    frame_retrieved = False
+    elapsed_time = rospy.get_time()
+    for i in range(tbl_len):
+        if (elapsed_time > delayed_ts[i]):
+            img = delayed_frames[i]
+            delayed_frames = delayed_frames[:(-tbl_len+i-1)]
+            delayed_ts = delayed_ts[:(-tbl_len+i-1)]
+            frame_retrieved = True
+            break
+    return img, frame_retrieved
+
+
+def cam_callback(msg):
+    t = rospy.get_time()    
+    br = CvBridge()
+    frame = br.imgmsg_to_cv2(msg)
+    frame = cv2.flip(frame, 0)
+    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    show_frame, frame_retrieved = frame_delay(frame, t)
+    if frame_retrieved:
+        cv2.imshow('cam1 stream', show_frame)
+        cv2.waitKey(1)
     
 def main():   
-    # Subscribes to cam img stream 
+    # Subscribes to /tf and saves position and rotation arrays to global config variables 
     rospy.init_node('cam1_sub_node', anonymous=True)
-    rospy.Subscriber('cam1', Image, cam1_callback, queue_size=1)
+    rospy.Subscriber('cam1', Image, cam_callback, queue_size=1)
     rospy.spin()
     
 if __name__ == '__main__':
+    global delayed_frames
+    global delayed_ts
+    global latency
+    delayed_frames = []
+    delayed_ts = []
+    #latency = rospy.get_param('latency')
+    latency = 1000/1000
     main()

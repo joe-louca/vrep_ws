@@ -13,3 +13,6 @@ set_param('latency', latency)
 set_param('rate_hz', rate_hz)
 set_param('pos_step_size', pos_step_size)
 set_param('rot_step_size', rot_step_size)
+
+set_param('ax', {'x':0.0, 'y':0.0, 'z':0.0, 'roll':0.0, 'pitch':0.0, 'yaw':0.0})
+set_param('but', {'x_press':0})

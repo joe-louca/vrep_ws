@@ -1,2 +1,2 @@
-scripts
+launch:scripts
 -DCATKIN_DEVEL_PREFIX=/home/joe/vrep_ws/devel -DCMAKE_INSTALL_PREFIX=/home/joe/vrep_ws/install -G Unix Makefiles
