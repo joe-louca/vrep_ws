@@ -3,7 +3,6 @@ import fcntl, struct, array, time
 EVIOCRMFF = 0x40044581
 EVIOCSFF = 0x40304580
 LOG_CLASS_ON = False
-TIME_DELTA = 250
 
 class Vibrate:
 
@@ -48,9 +47,14 @@ class Vibrate:
         else:
             fcntl.ioctl(self.ff_joy, EVIOCRMFF, id)
 
-f = Vibrate("/dev/input/event25")
-p = f.new_effect(1.0, 1.0, TIME_DELTA )
-f.play_efect((p))
-time.sleep(TIME_DELTA / 1000.0)
-f.stop_effect((p))
-f.forget_effect((p))
+def vib():
+    TIME_DELTA = 250
+    f = Vibrate("/dev/input/event25")
+    p = f.new_effect(1.0, 1.0, TIME_DELTA )
+    f.play_efect((p))
+    time.sleep(TIME_DELTA / 1000.0)
+    f.stop_effect((p))
+    f.forget_effect((p))
+
+if __name__ == '__main__':
+    vib()
