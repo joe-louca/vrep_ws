@@ -23,6 +23,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/home/joe/vrep_ws/src/scripts/package.xml"
   "/home/joe/vrep_ws/src/scripts/src/feedbacks/cam1_sub.py"
   "/home/joe/vrep_ws/src/scripts/src/feedbacks/cam2_sub.py"
+  "/home/joe/vrep_ws/src/scripts/src/feedbacks/ft_sub.py"
   "/home/joe/vrep_ws/src/scripts/src/feedbacks/joy_vibrate.py"
   "/home/joe/vrep_ws/src/scripts/src/inputs/config.py"
   "/home/joe/vrep_ws/src/scripts/src/inputs/gripper_pub.py"

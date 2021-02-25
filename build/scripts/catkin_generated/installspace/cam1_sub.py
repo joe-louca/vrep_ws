@@ -50,6 +50,5 @@ if __name__ == '__main__':
     global latency
     delayed_frames = []
     delayed_ts = []
-    #latency = rospy.get_param('latency')
-    latency = 1000/1000
+    latency = rospy.get_param('latency')
     main()

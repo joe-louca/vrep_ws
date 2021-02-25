@@ -3,7 +3,6 @@ import fcntl, struct, array, time
 EVIOCRMFF = 0x40044581
 EVIOCSFF = 0x40304580
 LOG_CLASS_ON = False
-TIME_DELTA = 250
 
 class Vibrate:
 
@@ -48,9 +47,26 @@ class Vibrate:
         else:
             fcntl.ioctl(self.ff_joy, EVIOCRMFF, id)
 
-f = Vibrate("/dev/input/event25")
-p = f.new_effect(1.0, 1.0, TIME_DELTA )
-f.play_efect((p))
-time.sleep(TIME_DELTA / 1000.0)
-f.stop_effect((p))
-f.forget_effect((p))
+def vib(t):
+    f = Vibrate("/dev/input/event25")
+    p = f.new_effect(1.0, 1.0, t)
+    f.play_efect((p))
+    time.sleep(t / 1000.0)
+    f.stop_effect((p))
+    f.forget_effect((p))
+
+def send_feedback()
+    rospy.init_node('vib_fb_node', anonymous=True)
+    rate_hz = rospy.get_param('rate_hz')
+    rate = rospy.Rate(rate_hz)
+    
+    while not rospy.is_shutdown():        
+        vib_fb = rospy.get_param('vib_fb')
+        if vib_fb:
+            vib(10)
+            
+        rate.sleep()
+
+        
+if __name__ == '__main__':
+    send_feedback()

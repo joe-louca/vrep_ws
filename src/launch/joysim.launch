@@ -2,6 +2,7 @@
 <launch>
 	<arg name="node_start_delay1" default="5.0" /> <!-- Short Delay -->
 	<arg name="node_start_delay2" default="10.0" /> <!-- Long Delay -->
+	<arg name="node_start_delay3" default="15.0" /> <!-- Longer Delay -->
 	
 	<!-- Start simulation -->
 	<node pkg="launch" type="run_coppelia.sh" name="run_coppelia" output="screen"/>
@@ -37,6 +38,7 @@
 	<node pkg="scripts" type="cam1_sub.py" name="cam1_sub" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/>
 	
 	<!-- Launch haptic subscribers -->
-	<!-- TO DO -->
+	<node pkg="scripts" type="ft_sub.py" name="ft_sub" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/>
+	<node pkg="scripts" type="joy_vibrate.py" name="joy_vibrate" launch-prefix="bash -c 'sleep $(arg node_start_delay3); $0 $@' "/>
 	
 </launch>

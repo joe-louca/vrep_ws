@@ -61,6 +61,7 @@ catkin_install_python(PROGRAMS
    src/inputs/time_pub.py
    src/feedbacks/cam1_sub.py
    src/feedbacks/cam2_sub.py
+   src/feedbacks/ft_sub.py
    src/feedbacks/joy_vibrate.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
