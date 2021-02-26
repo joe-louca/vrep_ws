@@ -1,4 +1,5 @@
 import fcntl, struct, array, time
+import rospy
 
 EVIOCRMFF = 0x40044581
 EVIOCSFF = 0x40304580
@@ -47,14 +48,26 @@ class Vibrate:
         else:
             fcntl.ioctl(self.ff_joy, EVIOCRMFF, id)
 
-def vib():
-    TIME_DELTA = 250
+def vib(strength):
     f = Vibrate("/dev/input/event25")
-    p = f.new_effect(1.0, 1.0, TIME_DELTA )
+    p = f.new_effect(1.0, 1.0, strength)
     f.play_efect((p))
-    time.sleep(TIME_DELTA / 1000.0)
+    time.sleep(strength / 1000.0)
     f.stop_effect((p))
     f.forget_effect((p))
 
+def send_feedback():
+    rospy.init_node('vib_fb_node', anonymous=True)
+    rate_hz = rospy.get_param('rate_hz')
+    rate = rospy.Rate(rate_hz)
+    
+    while not rospy.is_shutdown():        
+        vib_fb = rospy.get_param('vib_fb')
+        if vib_fb:
+            vib(100) # Could change this to adjust intensity based on force (param get 'ft')
+            
+        rate.sleep()
+
+        
 if __name__ == '__main__':
-    vib()
+    send_feedback()

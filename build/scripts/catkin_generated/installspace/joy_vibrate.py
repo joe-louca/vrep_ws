@@ -1,4 +1,5 @@
 import fcntl, struct, array, time
+import rospy
 
 EVIOCRMFF = 0x40044581
 EVIOCSFF = 0x40304580
@@ -55,13 +56,14 @@ def vib(t):
     f.stop_effect((p))
     f.forget_effect((p))
 
-def send_feedback()
+def send_feedback():
     rospy.init_node('vib_fb_node', anonymous=True)
-    rate_hz = rospy.get_param('rate_hz')
+    rate_hz = 10#rospy.get_param('rate_hz')
     rate = rospy.Rate(rate_hz)
     
     while not rospy.is_shutdown():        
-        vib_fb = rospy.get_param('vib_fb')
+        vib_fb = True#rospy.get_param('vib_fb')
+        print('sending vib')
         if vib_fb:
             vib(10)
             

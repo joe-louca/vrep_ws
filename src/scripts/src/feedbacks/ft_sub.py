@@ -32,12 +32,13 @@ def ft_callback(msg):
     # If above threshold, send vibration feedback
     vib_fb = False
     for i in range(2):
-        if ft[i] > f_threshold or ft[i+3] > t_threshold:
+        if abs(ft[i]) > f_threshold or abs(ft[i+3]) > t_threshold:
             vib_fb = True
             break
 
     # Update param    
     rospy.set_param('vib_fb', vib_fb)
+    rospy.set_param('ft', ft)
 
     
 def main():   

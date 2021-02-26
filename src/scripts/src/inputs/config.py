@@ -9,7 +9,7 @@ rate_hz = 50                    # Loop rate (Hz)
 pos_step_size = 1.0 / 1000.0    # Position step size (mm to m)
 rot_step_size = 0.5 * pi/180    # Rotation step size (deg torads)
 f_threshold = 100               # Force sensor threshold (N)
-t_threshold = 2                 # Torque sensor threshold (Nm)
+t_threshold = 4                 # Torque sensor threshold (Nm)
 
 set_param('latency', latency)
 set_param('rate_hz', rate_hz)
