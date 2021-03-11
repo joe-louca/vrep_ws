@@ -7,9 +7,9 @@ from rospy import set_param
 latency = 500.0 / 1000.0        # One way latency (ms to s)
 rate_hz = 50                    # Loop rate (Hz)
 pos_step_size = 1.0 / 1000.0    # Position step size (mm to m)
-rot_step_size = 0.5 * pi/180    # Rotation step size (deg torads)
-f_threshold = 100               # Force sensor threshold (N)
-t_threshold = 2                 # Torque sensor threshold (Nm)
+rot_step_size = 1.0 * pi/180    # Rotation step size (deg to rads)
+f_threshold = 2000               # Force sensor threshold (N)
+t_threshold = 10                 # Torque sensor threshold (Nm)
 
 set_param('latency', latency)
 set_param('rate_hz', rate_hz)

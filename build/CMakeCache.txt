@@ -476,6 +476,9 @@ launch_SOURCE_DIR:STATIC=/home/joe/vrep_ws/src/launch
 //Path to a library.
 lib:FILEPATH=/usr/lib/liborocos-kdl.so
 
+//The directory containing a CMake configuration file for mavros_msgs.
+mavros_msgs_DIR:PATH=mavros_msgs_DIR-NOTFOUND
+
 //The directory containing a CMake configuration file for message_filters.
 message_filters_DIR:PATH=/opt/ros/noetic/share/message_filters/cmake
 
@@ -496,6 +499,12 @@ object_recognition_msgs_DIR:PATH=/opt/ros/noetic/share/object_recognition_msgs/c
 
 //The directory containing a CMake configuration file for octomap_msgs.
 octomap_msgs_DIR:PATH=/opt/ros/noetic/share/octomap_msgs/cmake
+
+//Value Computed by CMake
+offboard_cmd_BINARY_DIR:STATIC=/home/joe/vrep_ws/build/offboard_cmd
+
+//Value Computed by CMake
+offboard_cmd_SOURCE_DIR:STATIC=/home/joe/vrep_ws/src/offboard_cmd
 
 //The directory containing a CMake configuration file for rosconsole.
 rosconsole_DIR:PATH=/opt/ros/noetic/share/rosconsole/cmake
