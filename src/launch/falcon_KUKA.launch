@@ -5,23 +5,17 @@
 	<arg name="node_start_delay3" default="15.0" /> <!-- Longer Delay -->
 	
 	<!-- Start simulation -->
-	<node pkg="launch" type="run_coppelia.sh" name="run_coppelia" output="screen"/>
+	<node pkg="launch" type="run_cop_KUKA.sh" name="run_cop_KUKA" output="screen"/>
 
 	<!-- Input streams -->
-	<!-- Joy node-->
-
-	<node pkg="joy" type="joy_node" name="joy">
-    		<param name="dev" value="/dev/input/js0" />
-    		<param name="deadzone" value="0.2" />
-    		<param name="autorepeat_rate" value="40" />
-    		<param name="coalesce_interval" value="0.025" />
-  	</node>
+	<!-- Falcon node-->
+	<node pkg="launch" type="run_falcon.sh" name="run_falcon"/>
 	
 	<!-- Load config parameters -->
 	<node pkg="scripts" type="config.py" name="config"/>
 
 	<!--Launch input subscribers-->
-	<node pkg="scripts" type="joy_sub.py" name="joy_sub"/>
+	<node pkg="scripts" type="falcon_sub.py" name="joy_sub"/>
 	<node pkg="scripts" type="tf_sub.py" name="tf_sub"/>
 		
 	<!-- Manage inputs - Delayed for coppelia to start -->	
@@ -38,7 +32,6 @@
 	<node pkg="scripts" type="cam1_sub.py" name="cam1_sub" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/>
 	
 	<!-- Launch haptic subscribers -->
-	<node pkg="scripts" type="ft_sub.py" name="ft_sub" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/>
-	<node pkg="scripts" type="joy_vibrate.py" name="joy_vibrate" launch-prefix="bash -c 'sleep $(arg node_start_delay3); $0 $@' "/>
+	<node pkg="scripts" type="ft_delay_pub.py" name="ft_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/>
 	
 </launch>

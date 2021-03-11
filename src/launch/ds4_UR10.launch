@@ -5,17 +5,23 @@
 	<arg name="node_start_delay3" default="15.0" /> <!-- Longer Delay -->
 	
 	<!-- Start simulation -->
-	<node pkg="launch" type="run_coppelia.sh" name="run_coppelia" output="screen"/>
+	<node pkg="launch" type="run_cop_UR10.sh" name="run_cop_UR10" output="screen"/>
 
 	<!-- Input streams -->
-	<!-- Falcon node-->
-	<node pkg="launch" type="run_falcon.sh" name="run_falcon"/>
+	<!-- Joy node-->
+
+	<node pkg="joy" type="joy_node" name="joy">
+    		<param name="dev" value="/dev/input/js0" />
+    		<param name="deadzone" value="0.2" />
+    		<param name="autorepeat_rate" value="40" />
+    		<param name="coalesce_interval" value="0.025" />
+  	</node>
 	
 	<!-- Load config parameters -->
 	<node pkg="scripts" type="config.py" name="config"/>
 
 	<!--Launch input subscribers-->
-	<node pkg="scripts" type="falcon_sub.py" name="joy_sub"/>
+	<node pkg="scripts" type="joy_sub.py" name="joy_sub"/>
 	<node pkg="scripts" type="tf_sub.py" name="tf_sub"/>
 		
 	<!-- Manage inputs - Delayed for coppelia to start -->	

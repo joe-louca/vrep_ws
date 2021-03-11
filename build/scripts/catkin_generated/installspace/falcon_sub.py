@@ -13,7 +13,7 @@ def falcon_callback(msg):
     rospy.set_param('ax', {'x':x, 'y':y, 'z':z, 'roll':roll, 'pitch':pitch, 'yaw':yaw})
                     
     gripper_control = msg.header.frame_id
-    if gripper_control = 'y':
+    if gripper_control == 'y':
         rospy.set_param('but', {'x_press':1})
     else:
         rospy.set_param('but', {'x_press':0})

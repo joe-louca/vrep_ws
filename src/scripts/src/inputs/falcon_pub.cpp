@@ -10,6 +10,8 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <stdlib.h>     /* abs */
+
 
 #include "falcon/core/FalconDevice.h"
 #include "falcon/firmware/FalconFirmwareNovintSDK.h"
@@ -24,17 +26,22 @@
 
 #include <ros/ros.h>
 #include <geometry_msgs/TwistStamped.h>
+#include <std_msgs/Float32MultiArray.h>
 
 using namespace libnifalcon;
 using namespace std;
 using namespace StamperKinematicImpl;
 
 FalconDevice falcon;
+
 ros::Publisher twist_pub;
 
-//////////////////////////////////////////////////////////
+std::array<double, 3> pos;
+std::array<double, 6> force;
+std::array<double, 3> force_apply;
+bool rpy_mode;
+
 /// Ask libnifalcon to get the Falcon ready for action
-/// nothing clever here, straight from the examples
 bool initialise()
 {
   falcon.setFalconFirmware<FalconFirmwareNovintSDK>();
@@ -125,8 +132,8 @@ void publish_twist(float deadzone, std::array<double, 3>& falcon_pos, bool falco
   if (!falcon_rpy_mode)
   {
     twist.twist.linear.x = (abs(falcon_pos[0]) > deadzone) ? falcon_pos[0] : 0;
-    twist.twist.linear.y = (abs(falcon_pos[1]) > deadzone) ? falcon_pos[1] : 0; 
-    twist.twist.linear.z = (abs(falcon_pos[2]) > deadzone) ? falcon_pos[2] : 0;
+    twist.twist.linear.y = (abs(falcon_pos[2]) > deadzone) ? falcon_pos[2] : 0; 
+    twist.twist.linear.z = (abs(falcon_pos[1]) > deadzone) ? falcon_pos[1] : 0;
     twist.twist.angular.x = 0.0;
     twist.twist.angular.y = 0.0;
     twist.twist.angular.z = 0.0;  
@@ -136,11 +143,31 @@ void publish_twist(float deadzone, std::array<double, 3>& falcon_pos, bool falco
     twist.twist.linear.x = 0.0;
     twist.twist.linear.y = 0.0;
     twist.twist.linear.z = 0.0;
-    twist.twist.angular.x = (abs(falcon_pos[1]) > deadzone) ? falcon_pos[0] : 0;
+    twist.twist.angular.x = (abs(falcon_pos[0]) > deadzone) ? falcon_pos[0] : 0;
     twist.twist.angular.y = (abs(falcon_pos[1]) > deadzone) ? falcon_pos[1] : 0; 
-    twist.twist.angular.z = (abs(falcon_pos[0]) > deadzone) ? falcon_pos[2] : 0;  
+    twist.twist.angular.z = (abs(falcon_pos[2]) > deadzone) ? falcon_pos[2] : 0;  
   }
   twist_pub.publish(twist);
+}
+
+void ft_callback(const std_msgs::Float32MultiArray::ConstPtr& msg)
+{
+  std::cout << "in callback" << std::endl;
+  if (!rpy_mode)
+  {
+    std::cout << "reading force" << std::endl;
+    force[0] = msg->data[0];
+    force[1] = msg->data[1];
+    force[2] = msg->data[2];
+  }
+  else
+  {
+    std::cout << "reading t" << std::endl;
+    force[0] = msg->data[3];
+    force[1] = msg->data[4];
+    force[2] = msg->data[5];
+  }
+    
 }
 
 int main(int argc, char* argv[])
@@ -148,12 +175,15 @@ int main(int argc, char* argv[])
 
   ros::init(argc, argv, "falcon_stream");
   ros::NodeHandle n;
+  ros::Subscriber ft_sub;
+
   twist_pub = n.advertise<geometry_msgs::TwistStamped>("falcon/twist", 1);
-	if(!initialise())
-		return 0;
 
-  std::array<double, 3> pos;
-
+  if(!initialise())
+  {
+    return 0;
+  }
+  
   // Get mid positions
   float z_min = 0.0745;
   float z_max = 0.175;
@@ -166,21 +196,32 @@ int main(int argc, char* argv[])
   float y_min = -0.053;
   float y_max = 0.053;
   float y_mid = y_min + (y_max - y_min)/2.0;
-	
-  bool rpy_mode = false;
+  
+  // Get threshold values
+  float f_threshold;
+  float t_threshold;
+  n.getParam("f_threshold",f_threshold);
+  n.getParam("t_threshold",t_threshold);
+
+  // Initialise button control variables	
   int btn;
-  string gripper_control = "n";
+  string gripper_control;
+
+  // Set loop rate
+  int rate_hz;
+  n.getParam("rate_hz",rate_hz);
+  //ros::Rate loop_rate(rate_hz);
 
   while(ros::ok())
   {
+    //// CONTROLLER INPUT
+    
+    // Set button variables
     rpy_mode = false;
+    gripper_control = "n";
     
     //Ask libnifalcon to update the encoder positions and apply any forces waiting:
     falcon.runIOLoop();
-    
-    std::array<double, 3> pos;
-    std::array<double, 3> force;
-    
     pos = falcon.getPosition();
     
     // Normalise outputs
@@ -188,9 +229,8 @@ int main(int argc, char* argv[])
     pos[1] = pos[1]*1.0/(y_max-y_mid);
     pos[2] = (pos[2]-z_mid)*1.0/(z_max-z_mid);
     
+    // If centre button pressed, switch to rpy mode
     btn = falcon.getFalconGrip()->getDigitalInputs(); 
-
-    // if centre button pressed, switch to rpy mode
     if (btn & libnifalcon::FalconGripFourButton::CENTER_BUTTON)
     {
       rpy_mode = true;
@@ -206,19 +246,60 @@ int main(int argc, char* argv[])
       gripper_control = "n";
     }
     
+    // Publish controller input
     publish_twist(0.15, pos, rpy_mode, gripper_control); 
 
+    force_apply[0] = -7*pos[0];
+    force_apply[1] = -7*pos[1];
+    force_apply[2] = -7*pos[2];
 
-    // GET FT_SENSOR READING
-    // IF NOT AT THRESHOLD THEN SPRING FORCE TORETURN TO HOME POSITION:
-    force[0] = -7*pos[0];
-    force[1] = -7*pos[1];
-    force[2] = -7*pos[2];
+
+    ///// FORCE FEEDBACK - TO DO
+    // Get ft reading
+    //ft_sub = n.subscribe<std_msgs::Float32MultiArray>("delayed_ft", 1, ft_callback);     
+            
+    // IF NOT AT THRESHOLD THEN SPRING FORCE TO RETURN TO HOME POSITION:
+    //if (!rpy_mode)
+    //{ 
+    //  if (!(abs(force[0])>f_threshold || abs(force[1])>f_threshold || abs(force[2])>f_threshold)) // Force
+    //  {
+    //    force_apply[0] = -7*pos[0];
+    //    force_apply[1] = -7*pos[1];
+    //    force_apply[2] = -7*pos[2];
+    //  }
+    //  else
+    //  {
+    //    force_apply[0] = -abs(force[0])*pos[0]; // x falcon, x sim
+    //    force_apply[1] = -abs(force[2])*pos[2]; // y falcon, z sim
+    //    force_apply[2] = -abs(force[1])*pos[1]; // z falcon, y sim
+    //    //std::cout << "force exceeded" << std::endl;
+    //    //std::cout << -7*pos[0] << std::endl;
+    //    //std::cout << force_apply[0] << std::endl;
+    //  }
+    //}
+    //else 
+    //{
+    //  if (!(abs(force[0])>t_threshold || abs(force[1])>t_threshold || abs(force[2])>t_threshold)) // Torque
+    //  {
+    //    force_apply[0] = -7*pos[0];
+    //    force_apply[1] = -7*pos[1];
+    //    force_apply[2] = -7*pos[2];
+    //  }
+    //  else
+    //  {
+    //    force_apply[0] = -abs(force[0])*pos[0]; // x falcon, x sim
+    //    force_apply[1] = -abs(force[1])*pos[1]; // y falcon, y sim
+    //    force_apply[2] = -abs(force[2])*pos[2]; // z falcon, z sim
+    //    //std::cout << "torque exceeded" << std::endl;
+    //    //std::cout << -7*pos[0] << std::endl;
+    //    //std::cout << force_apply[0] << std::endl;
+    //  }
+    //}
     
-    // ELSE SET FORCE TO FT_READINGS
-      
-    falcon.setForce(force);
+    falcon.setForce(force_apply);
     
+    //ros::spinOnce(); 
+    //loop_rate.sleep();    
   }
   
   falcon.close();

@@ -13,6 +13,8 @@ string
 -
 cmath
 -
+stdlib.h
+-
 falcon/core/FalconDevice.h
 /home/joe/vrep_ws/src/scripts/src/inputs/falcon/core/FalconDevice.h
 falcon/firmware/FalconFirmwareNovintSDK.h
@@ -34,6 +36,8 @@ falcon/kinematic/FalconKinematicStamper.h
 ros/ros.h
 -
 geometry_msgs/TwistStamped.h
+-
+std_msgs/Float32MultiArray.h
 -
 
 /opt/ros/noetic/include/geometry_msgs/Twist.h
@@ -740,6 +744,24 @@ ros/forwards.h
 
 /opt/ros/noetic/include/rosconsole/macros_generated.h
 
+/opt/ros/noetic/include/std_msgs/Float32MultiArray.h
+string
+-
+vector
+-
+map
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+std_msgs/MultiArrayLayout.h
+-
+
 /opt/ros/noetic/include/std_msgs/Header.h
 string
 -
@@ -754,6 +776,40 @@ ros/serialization.h
 ros/builtin_message_traits.h
 -
 ros/message_operations.h
+-
+
+/opt/ros/noetic/include/std_msgs/MultiArrayDimension.h
+string
+-
+vector
+-
+map
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+
+/opt/ros/noetic/include/std_msgs/MultiArrayLayout.h
+string
+-
+vector
+-
+map
+-
+ros/types.h
+-
+ros/serialization.h
+-
+ros/builtin_message_traits.h
+-
+ros/message_operations.h
+-
+std_msgs/MultiArrayDimension.h
 -
 
 /opt/ros/noetic/include/xmlrpcpp/XmlRpcDecl.h
