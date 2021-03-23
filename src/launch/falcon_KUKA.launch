@@ -9,7 +9,7 @@
 
 	<!-- Input streams -->
 	<!-- Falcon node-->
-	<node pkg="launch" type="run_falcon.sh" name="run_falcon"/>
+	<!--node pkg="launch" type="run_falcon.sh" name="run_falcon"/-->
 	
 	<!-- Load config parameters -->
 	<node pkg="scripts" type="config.py" name="config"/>

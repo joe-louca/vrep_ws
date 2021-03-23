@@ -34,6 +34,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/home/joe/vrep_ws/src/scripts/src/inputs/move_pub.py"
   "/home/joe/vrep_ws/src/scripts/src/inputs/tf_sub.py"
   "/home/joe/vrep_ws/src/scripts/src/inputs/time_pub.py"
+  "/home/joe/vrep_ws/src/scripts/src/kuka/joint_sub.py"
   "/opt/ros/noetic/share/actionlib/cmake/actionlib-msg-extras.cmake"
   "/opt/ros/noetic/share/actionlib/cmake/actionlibConfig-version.cmake"
   "/opt/ros/noetic/share/actionlib/cmake/actionlibConfig.cmake"

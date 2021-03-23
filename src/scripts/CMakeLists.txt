@@ -65,6 +65,7 @@ catkin_install_python(PROGRAMS
    src/feedbacks/ft_sub.py
    src/feedbacks/ft_delay_pub.py
    src/feedbacks/joy_vibrate.py
+   src/kuka/joint_sub.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 
