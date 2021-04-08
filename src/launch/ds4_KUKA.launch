@@ -35,10 +35,10 @@
 	
 	<!-- Feedback Streams -->
 	<!-- Launch camera subscribers & display -->
-	<node pkg="scripts" type="cam1_sub.py" name="cam1_sub" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/>
+	<!--node pkg="scripts" type="cam1_sub.py" name="cam1_sub" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/-->
 	
 	<!-- Launch haptic subscribers -->
-	<node pkg="scripts" type="ft_sub.py" name="ft_sub" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/>
-	<node pkg="scripts" type="joy_vibrate.py" name="joy_vibrate" launch-prefix="bash -c 'sleep $(arg node_start_delay3); $0 $@' "/>
+	<!--node pkg="scripts" type="ft_sub.py" name="ft_sub" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/-->
+	<!--node pkg="scripts" type="joy_vibrate.py" name="joy_vibrate" launch-prefix="bash -c 'sleep $(arg node_start_delay3); $0 $@' "/-->
 	
 </launch>

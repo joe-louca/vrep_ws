@@ -34,11 +34,11 @@ using namespace StamperKinematicImpl;
 
 FalconDevice falcon;
 ros::Publisher twist_pub;
-std::array<double, 3> pos, oldpos, falcon_force;
-std::array<double, 6> force;
-double fx, fy, fz, tx, ty, tz, theta, phi, force_mag;
+std::array<double, 3> pos, ft_sensor, F, falcon_force;
+double fx, fy, fz, tx, ty, tz, stiffness, friction, sumF, dot_prod, f_threshold, t_threshold, friction_f_threshold, friction_t_threshold;
 int btn, rate_hz;
-float f_threshold, t_threshold;
+string gripper_control;
+bool rpy_mode;
 
 
 /// Ask libnifalcon to get the Falcon ready for action
@@ -112,8 +112,8 @@ void publish_twist(float deadzone, std::array<double, 3>& falcon_pos, bool falco
   
   if (!falcon_rpy_mode)
   {
-    twist.twist.linear.x = (abs(falcon_pos[0]) > deadzone) ? falcon_pos[0] : 0; // X (left/right) // if falcon position greater than deadzone, publish position, else publish 0
-    twist.twist.linear.y = (abs(falcon_pos[2]) > deadzone) ? -falcon_pos[2] : 0;// Y (in/out)
+    twist.twist.linear.x = (abs(falcon_pos[0]) > deadzone) ? falcon_pos[2] : 0; // X (left/right) // if falcon position greater than deadzone, publish position, else publish 0
+    twist.twist.linear.y = (abs(falcon_pos[2]) > deadzone) ? falcon_pos[0] : 0;// Y (in/out)
     twist.twist.linear.z = (abs(falcon_pos[1]) > deadzone) ? falcon_pos[1] : 0; // Z (up/down)
     twist.twist.angular.x = 0.0;
     twist.twist.angular.y = 0.0;
@@ -124,8 +124,8 @@ void publish_twist(float deadzone, std::array<double, 3>& falcon_pos, bool falco
     twist.twist.linear.x = 0.0;
     twist.twist.linear.y = 0.0;
     twist.twist.linear.z = 0.0;
-    twist.twist.angular.x = (abs(falcon_pos[0]) > deadzone) ? -falcon_pos[0] : 0; // pitch (up/down)
-    twist.twist.angular.y = (abs(falcon_pos[1]) > deadzone) ? -falcon_pos[1] : 0; // yaw (left/right
+    twist.twist.angular.x = (abs(falcon_pos[0]) > deadzone) ? falcon_pos[1] : 0; // pitch (down/up)
+    twist.twist.angular.y = (abs(falcon_pos[1]) > deadzone) ? falcon_pos[0] : 0; // yaw (left/right
     twist.twist.angular.z = (abs(falcon_pos[2]) > deadzone) ? falcon_pos[2] : 0; // roll (in/out)
   }
   twist_pub.publish(twist);
@@ -133,11 +133,7 @@ void publish_twist(float deadzone, std::array<double, 3>& falcon_pos, bool falco
 
 
 int main(int argc, char* argv[])
-{
-  std::array<double, 3> move, ft_sensor, F;
-  bool rpy_mode;
-  string gripper_control;
-  
+{  
   ros::init(argc, argv, "falcon_stream");
   ros::NodeHandle n;
   ros::Subscriber ft_sub;
@@ -163,12 +159,13 @@ int main(int argc, char* argv[])
   // Get threshold values
   n.getParam("f_threshold",f_threshold);
   n.getParam("t_threshold",t_threshold);
- 
+  n.getParam("friction_f_threshold",friction_f_threshold);
+  n.getParam("friction_t_threshold",friction_t_threshold);
+   
   // Set loop rate
   n.getParam("rate_hz",rate_hz);
   ros::Rate loop_rate(rate_hz);
-
-  oldpos[0] = oldpos[1] = oldpos[2] = 0.0;
+  rate_hz = 100;
   
   while(ros::ok())
   {
@@ -188,26 +185,18 @@ int main(int argc, char* argv[])
     // If PLUS button pressed, switch to rpy mode
     btn = falcon.getFalconGrip()->getDigitalInputs(); 
     if (btn & libnifalcon::FalconGripFourButton::PLUS_BUTTON)
-    {
-      rpy_mode = true;
-    }
+      {rpy_mode = true;}
     else 
-    {
-      rpy_mode = false;
-    }
+      {rpy_mode = false;}
     
     // read gripper button
     if (btn & libnifalcon::FalconGripFourButton::FORWARD_BUTTON)
-    {
-      gripper_control = "y";
-    }
+      {gripper_control = "y";}
     else 
-    {
-      gripper_control = "n";
-    }
+      {gripper_control = "n";}
     
     // if centre button pressed then allow moving
-    if (btn & libnifalcon::FalconGripFourButton::CENTER_BUTTON)
+    if ((btn & libnifalcon::FalconGripFourButton::CENTER_BUTTON) && !rpy_mode)
     {    
       // Publish as twist topic
       publish_twist(0.15, pos, rpy_mode, gripper_control); 
@@ -219,24 +208,20 @@ int main(int argc, char* argv[])
       n.getParam("ft_delay/tx",tx);
       n.getParam("ft_delay/ty",ty);
       n.getParam("ft_delay/tz",tz);
-      ft_sensor = {fx, fz, fy};
+      ft_sensor = {fy, fz, fx};
       
       // Set stiffness values 
-      double stiffness = 4.0;
-      double friction = 0.00;
-      // TO DO... Could also adjust stiffness depending on rigidity of object contacted 
-
-      // Set threshold values
-      f_threshold = 100.0;
-      double friction_threshold = 30.0;      
+      stiffness = 3.0;
+      friction = 0.0;
+      // TO DO... Could also adjust stiffness depending on rigidity of object contacted  
       
       // Set 0 force to start
       F = {0.0, 0.0, 0.0};
       falcon_force = {0.0, 0.0, 0.0};
       
-      // Right/Left = +/-[0]
-      // Up/Down = +/- [1]
-      // Out/in = +/-[2]
+      // R/L = +/-[0]
+      // U/D = +/-[1]
+      // O/I = +/-[2]
 
       // For each axis, check if force is large - i.e. rigid body contact
       for (int axis = 0; axis < 3; ++axis)
@@ -246,11 +231,11 @@ int main(int argc, char* argv[])
       }
       
       // Normalise F to ratios
-      double sumF = F[0] + F[1] + F[2];
+      sumF = F[0] + F[1] + F[2];
       F = {F[0]/sumF, F[1]/sumF, F[2]/sumF};
       
       // check which side falcon pos is for the plane normal to F which intersects {0,0,0} (dot product of F (assume normal to surface) and position)
-      double dot_prod = F[0]*pos[0] + F[1]*pos[1] + F[2]*pos[2];
+      dot_prod = F[0]*pos[0] + F[1]*pos[1] + F[2]*pos[2];
       if (dot_prod < 0.0)		// pos is opposite direction of normal force, so apply immovable force in normal direction
         {falcon_force = {stiffness*F[0], stiffness*F[1], stiffness*F[2]};} 
       
@@ -258,7 +243,7 @@ int main(int argc, char* argv[])
       // For each axis, check if force is medium - i.e. frictional
       for (int axis = 0; axis < 3; ++axis)
       {
-        if ((ft_sensor[axis] > friction_threshold) && (ft_sensor[axis] < f_threshold))
+        if ((ft_sensor[axis] > friction_f_threshold) && (ft_sensor[axis] < f_threshold))
           {F[axis] = ft_sensor[axis];}
         else
           {F[axis] = 0.0;}
@@ -277,6 +262,73 @@ int main(int argc, char* argv[])
       // Set falcon force
       falcon.setForce(falcon_force);           
     }
+    
+    else if ((btn & libnifalcon::FalconGripFourButton::CENTER_BUTTON) && rpy_mode)
+    {    
+      // Publish as twist topic
+      publish_twist(0.15, pos, rpy_mode, gripper_control); 
+      
+      // Get ft reading
+      n.getParam("ft_delay/fx",fx);
+      n.getParam("ft_delay/fy",fy);
+      n.getParam("ft_delay/fz",fz);
+      n.getParam("ft_delay/tx",tx);
+      n.getParam("ft_delay/ty",ty);
+      n.getParam("ft_delay/tz",tz);
+      ft_sensor = {fy, fz, fx};
+      
+      // Set stiffness values 
+      stiffness = 4.0;
+      friction = 0.0;
+      // TO DO... Could also adjust stiffness depending on rigidity of object contacted  
+      
+      // Set 0 force to start
+      F = {0.0, 0.0, 0.0};
+      falcon_force = {0.0, 0.0, 0.0};
+      
+      // R/L = +/-[0]
+      // U/D = +/-[1]
+      // O/I = +/-[2]
+
+      // For each axis, check if force is large - i.e. rigid body contact
+      for (int axis = 0; axis < 3; ++axis)
+      {
+        if (ft_sensor[axis] > t_threshold)
+          {F[axis] = ft_sensor[axis];}
+      }
+      
+      // Normalise F to ratios
+      sumF = F[0] + F[1] + F[2];
+      F = {F[0]/sumF, F[1]/sumF, F[2]/sumF};
+      
+      // check which side falcon pos is for the plane normal to F which intersects {0,0,0} (dot product of F (assume normal to surface) and position)
+      dot_prod = F[0]*pos[0] + F[1]*pos[1] + F[2]*pos[2];
+      if (dot_prod < 0.0)		// pos is opposite direction of normal force, so apply immovable force in normal direction
+        {falcon_force = {stiffness*F[0], stiffness*F[1], stiffness*F[2]};} 
+      
+      
+      // For each axis, check if force is medium - i.e. frictional
+      for (int axis = 0; axis < 3; ++axis)
+      {
+        if ((ft_sensor[axis] > friction_t_threshold) && (ft_sensor[axis] < t_threshold))
+          {F[axis] = ft_sensor[axis];}
+        else
+          {F[axis] = 0.0;}
+      }
+      
+      // check which side falcon pos is for the plane normal to F which intersects {0,0,0} (dot product of F (assume major friction direction) and position)
+      dot_prod = F[0]*pos[0] + F[1]*pos[1] + F[2]*pos[2];
+      
+      if (dot_prod < 0.0) // pos is opposite direction of friction force, so add a drag force in normal direction
+      {
+        falcon_force[0] += friction*F[0];
+        falcon_force[1] += friction*F[1];
+        falcon_force[2] += friction*F[2];
+      }
+        
+      // Set falcon force
+      falcon.setForce(falcon_force);           
+    }    
         
     else
     {

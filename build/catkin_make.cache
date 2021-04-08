@@ -1,2 +1,2 @@
-launch:scripts
+launch:robotiq/robotiq:robotiq/robotiq_2f_140_gripper_visualization:robotiq/robotiq_2f_85_gripper_visualization:robotiq/robotiq_2f_c2_gripper_visualization:robotiq/robotiq_2f_gripper_action_server:robotiq/robotiq_2f_gripper_control:robotiq/robotiq_ethercat:robotiq/robotiq_ft_sensor:robotiq/robotiq_modbus_rtu:robotiq/robotiq_modbus_tcp:scripts
 -DCATKIN_DEVEL_PREFIX=/home/joe/vrep_ws/devel -DCMAKE_INSTALL_PREFIX=/home/joe/vrep_ws/install -G Unix Makefiles

@@ -8,12 +8,11 @@
 	<node pkg="launch" type="run_cop_KUKA.sh" name="run_cop_KUKA" output="screen"/>
 
 	<!-- Input streams -->
-	<!-- Falcon node-->
-	<!--node pkg="launch" type="run_falcon.sh" name="run_falcon"/-->
-	
 	<!-- Load config parameters -->
 	<node pkg="scripts" type="config.py" name="config"/>
 
+
+	
 	<!--Launch input subscribers-->
 	<node pkg="scripts" type="falcon_sub.py" name="joy_sub"/>
 	<node pkg="scripts" type="tf_sub.py" name="tf_sub"/>
@@ -33,5 +32,8 @@
 	
 	<!-- Launch haptic subscribers -->
 	<node pkg="scripts" type="ft_delay_pub.py" name="ft_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/>
+
+	<!-- Falcon node-->
+	<node pkg="launch" type="run_falcon.sh" name="run_falcon" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/>
 	
 </launch>

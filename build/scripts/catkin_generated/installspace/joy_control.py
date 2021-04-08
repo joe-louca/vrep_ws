@@ -57,6 +57,13 @@ def ax_or_but_press(ax, but):
     else:
         return False
 
+def EasyAngle(ang):
+    while ang >= 2*math.pi:
+        ang -= 2*math.pi
+    while ang < 0:
+        ang += 2*math.pi
+    return ang
+
 def EulerToQuaternion(roll, pitch, yaw):
     qx = math.sin(roll/2) * math.cos(pitch/2) * math.cos(yaw/2) - math.cos(roll/2) * math.sin(pitch/2) * math.sin(yaw/2)
     qy = math.cos(roll/2) * math.sin(pitch/2) * math.cos(yaw/2) + math.sin(roll/2) * math.cos(pitch/2) * math.sin(yaw/2)
@@ -162,6 +169,10 @@ def joy_pose_goal():
                 new_yaw = curr_yaw + rot_step_size * ax[5] 
 
                 new_qx, new_qy, new_qz, new_qw = EulerToQuaternion(new_roll, new_pitch, new_yaw)                    
+                #new_qx = EasyAngle(new_qx)
+                #new_qy = EasyAngle(new_qy)
+                #new_qz = EasyAngle(new_qz)
+                #new_qw = EasyAngle(new_qw)
                         
                 # If gripper button is pressed, toggle gripper pose
                 button_press_previous = button_press_current
