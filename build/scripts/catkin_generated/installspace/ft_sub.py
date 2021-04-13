@@ -28,16 +28,17 @@ def ft_callback(msg):
     t = rospy.get_time()
     ft_reading = [msg.data[0], msg.data[1], msg.data[2], msg.data[3], msg.data[4], msg.data[5], t]
     ft, ft_retrieved = ft_delay(ft_reading)
-
     # If above threshold, send vibration feedback
-    vib_fb = False
-    for i in range(2):
-        if ft[i] > f_threshold or ft[i+3] > t_threshold:
-            vib_fb = True
-            break
+    F = ft[0]*ft[0] + ft[1]*ft[1] + ft[2]*ft[2]
+    T = ft[3]*ft[3] + ft[4]*ft[4] + ft[5]*ft[5]
+    if F > f_threshold or T > t_threshold:
+        vib_fb = True
+    else:
+        vib_fb = False
 
     # Update param    
     rospy.set_param('vib_fb', vib_fb)
+    rospy.set_param('ft', ft)
 
     
 def main():   

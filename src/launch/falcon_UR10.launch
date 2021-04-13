@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<launch>
+	<arg name="node_start_delay1" default="5.0" /> <!-- Short Delay -->
+	<arg name="node_start_delay2" default="10.0" /> <!-- Long Delay -->
+	<arg name="node_start_delay3" default="15.0" /> <!-- Longer Delay -->
+	
+	<!-- Start simulation -->
+	<node pkg="launch" type="run_cop_UR10.sh" name="run_cop_UR10" output="screen"/>
+
+	<!-- Input streams -->
+	<!-- Load config parameters -->
+	<node pkg="scripts" type="config.py" name="config"/>
+	
+	
+
+	<!--Launch input subscribers-->
+	<node pkg="scripts" type="falcon_sub.py" name="joy_sub"/>
+	<node pkg="scripts" type="tf_sub.py" name="tf_sub"/>
+		
+	<!-- Manage inputs - Delayed for coppelia to start -->	
+	<node pkg="scripts" type="joy_control.py" name="joy_control" launch-prefix="bash -c 'sleep $(arg node_start_delay1); $0 $@' "/>
+	
+	<!-- Launch input publishers - Delayed for joy_control to start -->
+	<node pkg="scripts" type="move_pub.py" name="move_pub" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/>
+	<node pkg="scripts" type="gripper_pub.py" name="gripper_pub" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/>
+	<node pkg="scripts" type="time_pub.py" name="time_pub" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/>
+
+	
+	<!-- Feedback Streams -->
+	<!-- Launch camera subscribers & display -->
+	<node pkg="scripts" type="cam1_sub.py" name="cam1_sub" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/>
+	
+	<!-- Launch haptic subscribers -->
+	<node pkg="scripts" type="ft_delay_pub.py" name="ft_delay" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/>
+	
+	<!-- Falcon node-->
+	<node pkg="launch" type="run_falcon.sh" name="run_falcon" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/>
+</launch>
