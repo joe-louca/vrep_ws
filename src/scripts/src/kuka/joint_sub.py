@@ -1,12 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Mar 26 17:03:26 2018
+#!/usr/bin/env python
 
-@author: Mohammad SAFEEA
-
-Test script of iiwaPy class.
-
-"""
 import rospy
 from std_msgs.msg import Float32MultiArray
 

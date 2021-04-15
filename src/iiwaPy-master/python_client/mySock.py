@@ -6,9 +6,7 @@ Updated on Mon Oct 21 15:51:03 2019
 """
 import socket
 import time
-#import StringIO
 from io import StringIO
-
 
 class mySock:
     '''demonstration class only
@@ -31,7 +29,7 @@ class mySock:
         except:
             print('Error, could not establish a connection to the robot')
         time.sleep(1)
-        self.buff = StringIO.StringIO(2048)  
+        self.buff = StringIO(str(2048))  
         # Update the transform of the TCP if one is specified
         flag=False
         for num in trans:
@@ -72,7 +70,7 @@ class mySock:
     def send(self, msg):
         totalsent = 0
         while totalsent < len(msg):
-            sent = self.sock.send(msg[totalsent:])
+            sent = self.sock.send(bytes(msg[totalsent:], 'utf-8'))
             if sent == 0:
                 raise RuntimeError("socket connection broken")
             totalsent = totalsent + sent
@@ -80,7 +78,7 @@ class mySock:
     def receive(self):
         returnVal=[]
         while True:
-            data = self.sock.recv(1)                     
+            data = str(self.sock.recv(1), 'utf-8')                    
             if (data=='\n'):break            
             self.buff.write(data)                       
         returnVal= self.buff.getvalue()     
@@ -91,6 +89,6 @@ class mySock:
         
     def close(self):
         endCommand='end\n'
-        self.sock.send(endCommand)
+        self.sock.send(bytes(endCommand, 'utf-8'))
         time.sleep(1) # sleep for one seconds
         self.sock.close()

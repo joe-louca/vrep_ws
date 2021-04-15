@@ -246,7 +246,7 @@ class PTP:
             print('Position should be an array of three lements [x,y,z]')
             return
         if (len(vel)==1):
-            buff = StringIO.StringIO(2048)
+            buff = StringIO(str(2048))
             buff.write('jRelVel_')
             buff.write(str(vel[0]))
             buff.write('_')
@@ -270,7 +270,7 @@ class PTP:
             print('Joints positions shall be an array of 7 elements')
             return
         if (len(relVel)==1):
-            buff = StringIO.StringIO(2048)
+            buff = StringIO(str(2048))
             buff.write('jRelVel_')
             buff.write(str(relVel[0]))
             buff.write('_')
@@ -286,7 +286,7 @@ class PTP:
              
     def movePTPHomeJointSpace(self,relVel):
         if (len(relVel)==1):
-            buff = StringIO.StringIO(2048)
+            buff = StringIO(str(2048))
             buff.write('jRelVel_')
             buff.write(str(relVel[0]))
             buff.write('_')

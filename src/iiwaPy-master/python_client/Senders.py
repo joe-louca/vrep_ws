@@ -27,7 +27,7 @@ class Senders:
             print('EEF position shall be an array of 6 elements')
             return
         num=10000
-        buff = StringIO.StringIO(2048)
+        buff = StringIO(str(2048))
         buff.write('cArtixanPosition_')
         counter=0
         while counter<6:
@@ -44,7 +44,7 @@ class Senders:
             print('Joint positions shall be an array of 7 elements')
             return
         num=10000
-        buff = StringIO.StringIO(2048)
+        buff = StringIO(str(2048))
         buff.write('jp_')
         counter=0
         while counter<7:
@@ -61,7 +61,7 @@ class Senders:
             print('Joint positions shall be an array of 7 elements')
             return
         num=10000
-        buff = StringIO.StringIO(2048)
+        buff = StringIO(str(2048))
         buff.write('jpMT_')
         counter=0
         while counter<7:
@@ -78,7 +78,7 @@ class Senders:
             print('Joint positions shall be an array of 7 elements')
             return
         num=10000
-        buff = StringIO.StringIO(2048)
+        buff = StringIO(str(2048))
         buff.write('jpExT_')
         counter=0
         while counter<7:
@@ -95,7 +95,7 @@ class Senders:
             print('Joint positions shall be an array of 7 elements')
             return
         num=10000
-        buff = StringIO.StringIO(2048)
+        buff = StringIO(str(2048))
         buff.write('jpJP_')
         counter=0
         while counter<7:
@@ -112,7 +112,7 @@ class Senders:
             print('Frame cooridnate is an array of 6 elements [x,y,z,alpha,beta,gamma] ')
             return
         num=10000
-        buff = StringIO.StringIO(2048)
+        buff = StringIO(str(2048))
         buff.write('cArtixanPositionCirc1_')
         counter=0
         while counter<6:
@@ -129,7 +129,7 @@ class Senders:
             print('Frame cooridnate is an array of 6 elements [x,y,z,alpha,beta,gamma] ')
             return
         num=10000
-        buff = StringIO.StringIO(2048)
+        buff = StringIO(str(2048))
         buff.write('cArtixanPositionCirc2_')
         counter=0
         while counter<6:

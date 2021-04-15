@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Created on Mon Mar 26 17:03:26 2018
@@ -23,9 +24,9 @@ def main():
     # Set up iiwa connection
     ip ='172.31.1.148'
     iiwa=iiwaPy(ip)
-    iiwa.setBlueOn()
+    #iiwa.setBlueOn()
     time.sleep(2)
-    iiwa.setBlueOff()
+    #iiwa.setBlueOff()
     
     try:
         while True:
@@ -35,8 +36,11 @@ def main():
             joints = rospy.get_param('joint_angles')
             joint_cmd = [joints[0], joints[1], joints[2], joints[3], joints[4], joints[5], joints[6]]
 
+            # Testing
+            print(joint_cmd)
+            
             # Move to a joint space at a given velocity
-            iiwa.movePTPJointSpace(joint_cmd, velocity)
+            #iiwa.movePTPJointSpace(joint_cmd, velocity)
 
             # Run loop at given rate
             rate_sleep(t)          
