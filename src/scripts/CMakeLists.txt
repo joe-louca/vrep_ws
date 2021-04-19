@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   tf2_ros
   tf2_geometry_msgs
+  iiwaPy
 )
 
 ###################################
@@ -36,6 +37,7 @@ catkin_package(
   geometry_msgs
   tf2_ros
   tf2_geometry_msgs
+  iiwaPy
 )
 
 ###########
@@ -65,6 +67,7 @@ catkin_install_python(PROGRAMS
    src/feedbacks/ft_delay_pub.py
    src/feedbacks/joy_vibrate.py
    src/kuka/joint_sub.py
+   src/kuka/vrep_to_iiwa.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 

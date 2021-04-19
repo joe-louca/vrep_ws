@@ -1,0 +1,8 @@
+prefix=/home/joe/vrep_ws/devel
+
+Name: iiwaPy-master
+Description: Description of iiwaPy-master
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: rospy std_msgs

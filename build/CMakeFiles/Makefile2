@@ -63,6 +63,7 @@ all: universal_robot/universal_robots/all
 all: universal_robot/ur_description/all
 all: universal_robot/ur_e_description/all
 all: universal_robot/ur_msgs/all
+all: iiwaPy/all
 all: robotiq/robotiq_ethercat/all
 all: robotiq/robotiq_2f_gripper_control/all
 all: robotiq/robotiq_ft_sensor/all
@@ -96,6 +97,7 @@ preinstall: universal_robot/universal_robots/preinstall
 preinstall: universal_robot/ur_description/preinstall
 preinstall: universal_robot/ur_e_description/preinstall
 preinstall: universal_robot/ur_msgs/preinstall
+preinstall: iiwaPy/preinstall
 preinstall: robotiq/robotiq_ethercat/preinstall
 preinstall: robotiq/robotiq_2f_gripper_control/preinstall
 preinstall: robotiq/robotiq_ft_sensor/preinstall
@@ -134,6 +136,7 @@ clean: universal_robot/universal_robots/clean
 clean: universal_robot/ur_description/clean
 clean: universal_robot/ur_e_description/clean
 clean: universal_robot/ur_msgs/clean
+clean: iiwaPy/clean
 clean: robotiq/robotiq_ethercat/clean
 clean: robotiq/robotiq_2f_gripper_control/clean
 clean: robotiq/robotiq_ft_sensor/clean
@@ -212,6 +215,24 @@ gtest/googletest/clean: gtest/googletest/CMakeFiles/gtest_main.dir/clean
 gtest/googletest/clean: gtest/googletest/CMakeFiles/gtest.dir/clean
 
 .PHONY : gtest/googletest/clean
+
+#=============================================================================
+# Directory level rules for directory iiwaPy
+
+# Recursive "all" directory target.
+iiwaPy/all:
+
+.PHONY : iiwaPy/all
+
+# Recursive "preinstall" directory target.
+iiwaPy/preinstall:
+
+.PHONY : iiwaPy/preinstall
+
+# Recursive "clean" directory target.
+iiwaPy/clean:
+
+.PHONY : iiwaPy/clean
 
 #=============================================================================
 # Directory level rules for directory launch

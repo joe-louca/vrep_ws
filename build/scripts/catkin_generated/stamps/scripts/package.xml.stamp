@@ -16,6 +16,9 @@
   <depend>geometry_msgs</depend>
   <depend>tf2_ros</depend>
   <depend>tf2_geometry_msgs</depend>
+  
+  <build_depend>iiwaPy</build_depend>
+  <exec_depend>iiwaPy</exec_depend>
 
 
 

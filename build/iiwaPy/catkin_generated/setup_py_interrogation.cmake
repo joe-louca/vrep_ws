@@ -1,0 +1,7 @@
+set(iiwaPy_SETUP_PY_SETUP_MODULE "distutils.core")
+set(iiwaPy_SETUP_PY_VERSION "0.0.0")
+set(iiwaPy_SETUP_PY_SCRIPTS "")
+set(iiwaPy_SETUP_PY_PACKAGES "iiwaPy")
+set(iiwaPy_SETUP_PY_PACKAGE_DIRS "src/iiwaPy")
+set(iiwaPy_SETUP_PY_MODULES "")
+set(iiwaPy_SETUP_PY_MODULE_DIRS "")

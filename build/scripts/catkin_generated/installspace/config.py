@@ -12,7 +12,7 @@ f_threshold = 100.0             # Force sensor threshold for rigid collisions (N
 t_threshold = 5.0               # Torque sensor threshold (Nm)
 friction_f_threshold = 30.0     # Force sensor threshold for frictional forces (N)
 friction_t_threshold = 1.0      # Torque sensor threshold for frictional torque (Nm)
-velocity = 0.1                  # Kuka velocity
+velocity = [0.1]                  # Kuka velocity
 
 set_param('latency', latency)
 set_param('rate_hz', rate_hz)
