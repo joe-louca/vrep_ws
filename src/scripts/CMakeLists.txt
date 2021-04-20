@@ -68,6 +68,8 @@ catkin_install_python(PROGRAMS
    src/feedbacks/joy_vibrate.py
    src/kuka/joint_sub.py
    src/kuka/vrep_to_iiwa.py
+   src/UR10/vrep_to_UR10.py
+   src/UR10/UR10_pycontrol.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 

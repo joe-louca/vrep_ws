@@ -1,22 +1,16 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Jun 19 12:08:12 2018
-Updated 2019-Oct-07
-@author: Mohammad SAFEEA
-Example for controlling iiwa using GUI from an external PC
-"""
-
-from iiwaPy import iiwaPy
+import socket
 import rospy
 import math
 
 class CopControl:
     def __init__(self):
-        self.IP_of_robot = "172.31.1.148"
+        self.IP_of_robot = “192.168.0.9″
+        self.PORT_of_robot = 30002          # Same port used by the server
         self.connection_state = True #False (True for testing)
         self.velocity = rospy.get_param('velocity')
+        self.acceleration = 1.3962634015954636 
         self.commandsAngleList=[]
-        self.connect_to_iiwa()
+        self.connect_to_UR10()
 
         print('Press Ctrl-C to exit...')
         try:
@@ -27,10 +21,10 @@ class CopControl:
         except KeyboardInterrupt:
             pass
 
-        self.disconnect_from_iiwa()
+        self.disconnect_from_UR10()
 
 
-    def connect_to_iiwa(self):
+    def connect_to_UR10(self):
         # Check if already connected to the robot
         if self.connection_state:
             print("Already connected to the robot on IP: " + self.IP_of_robot)
@@ -39,14 +33,16 @@ class CopControl:
         # If the program made it to here, then there is no connection yet
         print("Connecting to robot at ip: " + self.IP_of_robot)
         try:
-            iiwa = iiwaPy(self.IP_of_robot)
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.sock.connect((self.IP_of_robot, self.PORT_of_robot))
+            client.wait_for_server()
             self.connection_state = True
             print("Connection established successfully")
         except:
             print("Error, could not connect at the specified IP")
             return            
 
-    def disconnect_from_iiwa(self):
+    def disconnect_from_UR10(self):
         # Check if there is an active connection
         if self.connection_state == False:
             print("Already offline")
@@ -57,7 +53,7 @@ class CopControl:
 
         # Try to disconnect        
         try:
-            self.iiwa.close()
+            self.sock.close()
             self.connection_state = False
             print("Disconnected successfully")
         except:
@@ -77,7 +73,7 @@ class CopControl:
         # Check if there is a command to act on
         if len(self.commandsAngleList) > 0:
             jPos = self.commandsAngleList[0]
-            #self.iiwa.movePTPJointSpace(jPos, self.velocity)
+            #self.sock.send("movej(" + str(jPos) + ", a=" + str(self.acceleration) + ", v=" + self.velocity + ")\n")
             self.commandsAngleList.remove(self.commandsAngleList[0])
 
         else:

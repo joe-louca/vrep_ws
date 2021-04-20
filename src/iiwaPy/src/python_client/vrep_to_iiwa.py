@@ -16,7 +16,6 @@ class CopControl:
         self.connection_state = True #False (True for testing)
         self.velocity = rospy.get_param('velocity')
         self.commandsAngleList=[]
-        print(self.velocity)
         self.connect_to_iiwa()
 
         print('Press Ctrl-C to exit...')
@@ -78,7 +77,6 @@ class CopControl:
         # Check if there is a command to act on
         if len(self.commandsAngleList) > 0:
             jPos = self.commandsAngleList[0]
-            print(jPos)
             #self.iiwa.movePTPJointSpace(jPos, self.velocity)
             self.commandsAngleList.remove(self.commandsAngleList[0])
 

@@ -122,6 +122,8 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/home/joe/vrep_ws/src/robotiq/robotiq_modbus_tcp/setup.py"
   "/home/joe/vrep_ws/src/scripts/CMakeLists.txt"
   "/home/joe/vrep_ws/src/scripts/package.xml"
+  "/home/joe/vrep_ws/src/scripts/src/UR10/UR10_pycontrol.py"
+  "/home/joe/vrep_ws/src/scripts/src/UR10/vrep_to_UR10.py"
   "/home/joe/vrep_ws/src/scripts/src/feedbacks/cam1_sub.py"
   "/home/joe/vrep_ws/src/scripts/src/feedbacks/cam2_sub.py"
   "/home/joe/vrep_ws/src/scripts/src/feedbacks/ft_delay_pub.py"

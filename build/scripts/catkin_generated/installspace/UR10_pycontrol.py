@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import roslib
 #roslib.load_manifest('ur_tutorial')
 import rospy
@@ -17,13 +17,13 @@ client = SimpleActionClient("/follow_joint_trajectory", FollowJointTrajectoryAct
 
 UR10joints = rospy.Subscriber('/joint_states', JointState)
 
-print("waiting to connect to client...")
+print "waiting to connect to client..."
 client.wait_for_server()
-print("connected to client! ")
+print "connected to client! "
 
-print("waiting to connect to joint subscriber...")
+print "waiting to connect to joint subscriber..."
 client.wait_for_server()
-print("connected to joint subscriber! ")
+print "connected to joint subscriber! "
 
 #print(UR10joints) # work this out!
 
@@ -50,9 +50,9 @@ p0.time_from_start = rospy.Duration(15)
 g.trajectory.points.append(p0)
 
 client.send_goal(g)
-print("sent the goal")
-print("waiting to get there")
+print "sent the goal"
+print "waiting to get there"
 client.wait_for_result()
-print("got there")
+print "got there"
 
 #just above table position is 0.6, 0.28, 0.1 (these are not the joint angles given)
