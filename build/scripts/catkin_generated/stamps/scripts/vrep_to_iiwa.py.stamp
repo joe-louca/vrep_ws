@@ -1,26 +1,33 @@
 # -*- coding: utf-8 -*-
 
-import iiwaPy #from iiwaPy import iiwaPy
+from iiwaPy import iiwaPy
 import rospy
 import math
 
 class CopControl:
     def __init__(self):
-        self.IP_of_robot = "172.31.1.148"
-        self.connection_state = True #False (True for testing)
-        self.velocity = rospy.get_param('velocity')
+        self.IP_of_robot = '172.31.1.148'
+        iiwa = iiwaPy(self.IP_of_robot)
+        
+        self.connection_state = False #(True for testing)
+        #self.velocity = rospy.get_param('velocity')
+        #self.velocity = self.velocity[0]
+
+        self.velocity = 2.0
+        self.acceleration = 1.0
         self.commandsAngleList=[]
-        print(self.velocity)
         self.connect_to_iiwa()
 
         print('Press Ctrl-C to exit...')
-        try:
-            while True:
-                self.get_cmd()
-                self.move_cmd()
-                
-        except KeyboardInterrupt:
-            pass
+        if self.connection_state:
+            try:
+                while True:
+                    print('moving')
+                    self.get_cmd()
+                    self.move_cmd()
+                    
+            except KeyboardInterrupt:
+                pass
 
         self.disconnect_from_iiwa()
 
@@ -34,7 +41,10 @@ class CopControl:
         # If the program made it to here, then there is no connection yet
         print("Connecting to robot at ip: " + self.IP_of_robot)
         try:
+            #self.sock = socket.socket(socket.AF_INET, socket.SOCKSTREAM)
+            #self.sock.connect((self.HOST, self.PORT))
             iiwa = iiwaPy(self.IP_of_robot)
+            
             self.connection_state = True
             print("Connection established successfully")
         except:
@@ -43,16 +53,16 @@ class CopControl:
 
     def disconnect_from_iiwa(self):
         # Check if there is an active connection
+        print("Disconnecting from robot")
         if self.connection_state == False:
             print("Already offline")
             return
 
         # If made it to here, then there is an active connection
-        print("Disconnecting from robot")
-
         # Try to disconnect        
         try:
             self.iiwa.close()
+            #self.sock.close()
             self.connection_state = False
             print("Disconnected successfully")
         except:
@@ -61,6 +71,7 @@ class CopControl:
 
     def get_cmd(self):
         joint_cmd_rads = rospy.get_param('joint_angles')
+        # TO DO - match to BRL ref frames...
         self.commandsAngleList.append(joint_cmd_rads)
 
     def move_cmd(self):
@@ -71,9 +82,8 @@ class CopControl:
         
         # Check if there is a command to act on
         if len(self.commandsAngleList) > 0:
-            jPos = self.commandsAngleList[0]
-            print(jPos)
-            #self.iiwa.movePTPJointSpace(jPos, self.velocity)
+            jPos = self.commandsAngleList[0]            
+            self.iiwa.movePTPJointSpace(jPos, self.velocity)
             self.commandsAngleList.remove(self.commandsAngleList[0])
 
         else:

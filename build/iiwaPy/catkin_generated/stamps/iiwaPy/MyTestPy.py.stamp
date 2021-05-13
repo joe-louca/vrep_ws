@@ -32,7 +32,7 @@ time.sleep(2)
 try:
    # -40, +75 -3, +48 -20 +35 -77
     # Move to an initial position    
-    initPos=[-45*math.pi/180, 75*math.pi/180, 0*math.pi/180, 50*math.pi/180, -20*math.pi/180, 35*math.pi/180, 0*math.pi/180]
+    initPos=[-45*math.pi/180, 75*math.pi/180, 0*math.pi/180, 50*math.pi/180, -25*math.pi/180, 35*math.pi/180, 0*math.pi/180]
     initVel=[0.1]
     iiwa.movePTPJointSpace(initPos,initVel)
     

@@ -9,7 +9,6 @@ class iiwaPy:
     getters=0
     realtime=0
     gnerealPorpuse=0
-    
     def __init__(self,ip,trans=(0,0,0,0,0,0)):
         port=30001
         self.soc=mySock((ip,port),trans)
@@ -37,6 +36,9 @@ class iiwaPy:
         
     def movePTPTransportPositionJointSpace(self,relVel):
         self.ptp.movePTPTransportPositionJointSpace(relVel)
+
+    def moveVelJointSpace(self,vel):
+        self.ptp.moveVelJointSpace(vel)
     """
     Cartesian linear  motion
     """        
@@ -65,6 +67,9 @@ class iiwaPy:
         
     def movePTPArc_AC(self,theta,c,k,vel):
         self.ptp.movePTPArc_AC(theta,c,k,vel)
+
+
+
         
 # realtime motion control
     def realTime_stopImpedanceJoints(self):

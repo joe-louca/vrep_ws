@@ -18,7 +18,7 @@
   	</node>
 	
 	<!-- Load config parameters -->
-	<node pkg="scripts" type="config.py" name="config"/>
+	<node pkg="scripts" type="config_kuka.py" name="config"/>
 
 	<!--Launch input subscribers-->
 	<node pkg="scripts" type="joy_sub.py" name="joy_sub"/>
@@ -31,18 +31,19 @@
 	<node pkg="scripts" type="move_pub.py" name="move_pub" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/>
 	<node pkg="scripts" type="gripper_pub.py" name="gripper_pub" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/>
 	<node pkg="scripts" type="time_pub.py" name="time_pub" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/>
-
+	
+	<!-- Launch joint angle subscriber & Kuka socket control script-->
+	<node pkg="scripts" type="kuka_joint_sub.py" name="joint_sub" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/>
 	
 	<!-- Feedback Streams -->
 	<!-- Launch camera subscribers & display -->
-	<node pkg="scripts" type="cam1_sub.py" name="cam1_sub" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/>
+	<!--node pkg="scripts" type="cam1_sub.py" name="cam1_sub" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/-->
 	
 	<!-- Launch haptic subscribers -->
 	<node pkg="scripts" type="ft_sub.py" name="ft_sub" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/>
 	<!--node pkg="scripts" type="joy_vibrate.py" name="joy_vibrate" launch-prefix="bash -c 'sleep $(arg node_start_delay3); $0 $@' "/-->
 
-	<!-- Launch joint angle subscriber & Physical Kuka script-->
-	<node pkg="scripts" type="joint_sub.py" name="joint_sub" launch-prefix="bash -c 'sleep $(arg node_start_delay2); $0 $@' "/>
+
 	
 	
 	

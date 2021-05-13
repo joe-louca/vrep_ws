@@ -14,7 +14,6 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   tf2_ros
   tf2_geometry_msgs
-  iiwaPy
 )
 
 ###################################
@@ -53,12 +52,15 @@ include_directories(
 
 ## Mark executable scripts (Python etc.) for installation
 catkin_install_python(PROGRAMS
-   src/inputs/config.py
+   src/inputs/config_UR10.py
+   src/inputs/config_kuka.py
    src/inputs/joy_sub.py
    src/inputs/falcon_sub.py
    src/inputs/tf_sub.py
-   src/inputs/joy_control.py
+   src/inputs/joy_control.py   
+   src/inputs/joy_control_CartVel.py
    src/inputs/move_pub.py
+   src/inputs/move_pub_CartVel.py
    src/inputs/gripper_pub.py
    src/inputs/time_pub.py
    src/feedbacks/cam1_sub.py
@@ -66,10 +68,9 @@ catkin_install_python(PROGRAMS
    src/feedbacks/ft_sub.py
    src/feedbacks/ft_delay_pub.py
    src/feedbacks/joy_vibrate.py
-   src/kuka/joint_sub.py
-   src/kuka/vrep_to_iiwa.py
+   src/kuka/kuka_joint_sub.py
    src/UR10/vrep_to_UR10.py
-   src/UR10/UR10_pycontrol.py
+   src/UR10/UR10_joint_sub.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 

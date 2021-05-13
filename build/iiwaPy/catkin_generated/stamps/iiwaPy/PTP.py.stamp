@@ -311,6 +311,26 @@ class PTP:
         jpos[3]=25*math.pi/180
         jpos[5]=90*math.pi/180
         self.movePTPJointSpace(jpos,relvel)
+
+
+    def moveVelJointSpace(self, jvel):
+        if(len(jvel)!=7):
+            print('Error in function [moveVelJointSpace]')
+            print('Joints velocities shall be an array of 7 elements')
+            return
+        counter = 0
+        num = 10000
+
+        buff = StringIO(str(2048))
+        buff.write('velJDC_')
+        while counter<7:
+            buff.write(str(math.ceil(jvel[counter]*num)/num))
+            buff.write('_')            
+            counter=counter+1
+        buff.write('\n')
+        command = buff.getvalue()
+        self.send(command)
+        
         
         
         

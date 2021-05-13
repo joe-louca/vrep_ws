@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Jun 19 12:08:12 2018
-Updated 2019-Oct-07
-@author: Mohammad SAFEEA
-Example for controlling iiwa using GUI from an external PC
-"""
 
 from iiwaPy import iiwaPy
 import rospy
@@ -12,20 +6,23 @@ import math
 
 class CopControl:
     def __init__(self):
-        self.IP_of_robot = "172.31.1.148"
-        self.connection_state = True #False (True for testing)
+        self.IP_of_robot = '172.31.1.148'        
+        self.connection_state = False #(True for testing)
+        
         self.velocity = rospy.get_param('velocity')
+        
         self.commandsAngleList=[]
         self.connect_to_iiwa()
 
         print('Press Ctrl-C to exit...')
-        try:
-            while True:
-                self.get_cmd()
-                self.move_cmd()
-                
-        except KeyboardInterrupt:
-            pass
+        if self.connection_state:
+            try:
+                while True:
+                    self.get_cmd()
+                    self.move_cmd()
+                    
+            except KeyboardInterrupt:
+                pass
 
         self.disconnect_from_iiwa()
 
@@ -39,33 +36,35 @@ class CopControl:
         # If the program made it to here, then there is no connection yet
         print("Connecting to robot at ip: " + self.IP_of_robot)
         try:
-            iiwa = iiwaPy(self.IP_of_robot)
+            self.iiwa = iiwaPy(self.IP_of_robot)
             self.connection_state = True
             print("Connection established successfully")
+            
         except:
             print("Error, could not connect at the specified IP")
             return            
 
     def disconnect_from_iiwa(self):
         # Check if there is an active connection
+        print("Disconnecting from robot")
         if self.connection_state == False:
             print("Already offline")
             return
 
         # If made it to here, then there is an active connection
-        print("Disconnecting from robot")
-
         # Try to disconnect        
         try:
             self.iiwa.close()
             self.connection_state = False
             print("Disconnected successfully")
+            
         except:
             print("Error could not disconnect")
             return
 
     def get_cmd(self):
         joint_cmd_rads = rospy.get_param('joint_angles')
+        # TO DO - match to BRL ref frames...
         self.commandsAngleList.append(joint_cmd_rads)
 
     def move_cmd(self):
@@ -77,7 +76,9 @@ class CopControl:
         # Check if there is a command to act on
         if len(self.commandsAngleList) > 0:
             jPos = self.commandsAngleList[0]
-            #self.iiwa.movePTPJointSpace(jPos, self.velocity)
+            print(jPos)
+            print(self.velocity)
+            self.iiwa.movePTPJointSpace(jPos, self.velocity)
             self.commandsAngleList.remove(self.commandsAngleList[0])
 
         else:

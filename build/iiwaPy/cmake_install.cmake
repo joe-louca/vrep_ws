@@ -109,10 +109,14 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/iiwaPy" TYPE PROGRAM FILES "/home/joe/vrep_ws/build/iiwaPy/catkin_generated/installspace/vrep_joints_to_kuka.py")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/iiwaPy" TYPE PROGRAM FILES "/home/joe/vrep_ws/build/iiwaPy/catkin_generated/installspace/vrep_to_iiwa_PTP.py")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/iiwaPy" TYPE PROGRAM FILES "/home/joe/vrep_ws/build/iiwaPy/catkin_generated/installspace/vrep_to_iiwa.py")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/iiwaPy" TYPE PROGRAM FILES "/home/joe/vrep_ws/build/iiwaPy/catkin_generated/installspace/vrep_to_iiwa_PTP-RT.py")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/iiwaPy" TYPE PROGRAM FILES "/home/joe/vrep_ws/build/iiwaPy/catkin_generated/installspace/vrep_to_iiwa_VEL.py")
 endif()
 
